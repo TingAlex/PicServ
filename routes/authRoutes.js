@@ -1,5 +1,6 @@
 const passport = require("passport");
 const mongoose = require("mongoose");
+const fileSys = require("../utils/fileSystem");
 const User = mongoose.model("users");
 
 module.exports = app => {
@@ -26,8 +27,14 @@ module.exports = app => {
   });
 
   app.get("/api/current_user", (req, res) => {
-    console.log("req user is " + req.user);
+    // console.log("req user is " + req.user);
     res.send(req.user);
+  });
+
+  app.get("/api/requestInfo", (req, res) => {
+    console.log(req);
+
+    res.send("");
   });
 
   app.post("/api/signup", async (req, res) => {
@@ -40,7 +47,8 @@ module.exports = app => {
     const user = new User({ userName: username, email, password });
     try {
       await user.save();
-      res.send({ user: { userName: username, email, password } });
+      fileSys.createUserFloder(user.id);
+      res.send({ user: { userName: username, email } });
     } catch (err) {
       res.status(422).send(err);
     }

@@ -8,11 +8,15 @@ const userSchema = new Schema({
   password: String,
   spaceUsed: { type: Number, default: 0 },
   spaceLimit: { type: Number, default: 100 },
-  pics: [
+  articles: [
     {
-      title: String,
-      size: { type: Number, default: 0 },
-      ref: { type: Boolean, default: false }
+      articleId: String,
+      pics: [
+        {
+          title: String,
+          picId: String
+        }
+      ]
     }
   ]
 });

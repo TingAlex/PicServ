@@ -16,6 +16,8 @@ passport.deserializeUser((id, done) => {
 
 passport.use(
   new LocalStrategy(
+    // 因为 passport 默认使用 username 和 password 字段，而我们是使用 req.body 中的
+    // email 与 password 做认证，所以需要用这一行来修改下默认字段。
     { usernameField: "email", passwordField: "password" },
     function(username, password, done) {
       User.findOne({ email: username }, function(err, user) {
