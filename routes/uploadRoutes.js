@@ -59,7 +59,7 @@ module.exports = app => {
     console.log(req.body);
 
     let picsNeedAdd = await analysePicsNeeded(
-      user._id,
+      user._id.toString(),
       user.articles,
       req.body.articleInfo
     );
