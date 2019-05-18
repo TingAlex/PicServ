@@ -86,12 +86,13 @@ var generateArticleFromTemplate = async (userId, articleId, content) => {
 /**
  * 删除文件所在的整个文件夹！
  *
- * @param {*} id 文件 id
+ * @param {*} userId 用户 id
+ * @param {*} articleId 文章 id,也是文章所在文件夹名称
  * @returns 是否成功删除的信息
  */
-var deleteArticle = id => {
+var deleteArticle = (userId, articleId) => {
   return new Promise((resolve, reject) => {
-    let filePath = path.join(Static.LocalFolder, id);
+    let filePath = path.join(Static.LocalFolder, userId, articleId);
     let files = [];
     files = fs.readdirSync(filePath);
     files.forEach((file, index) => {
@@ -99,8 +100,11 @@ var deleteArticle = id => {
     });
     fs.rmdir(filePath, err => {
       if (err) {
+        console.log("*******file remove err!******");
+        console.log(err);
         reject(err);
       }
+      console.log("*******file remove successfully!******");
       resolve("file remove successfully!");
     });
   });

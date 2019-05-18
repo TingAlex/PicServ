@@ -45,7 +45,7 @@ const addArticle = async (userId, articleInfo) => {
  * @param {Array{id:XX}} articleIdArr 文章 id 数组
  * @returns user
  */
-const removeArticle = async (userId, articleIdArr) => {
+const removeArticle = async (userId, articleIdArr = []) => {
   const user = await User.findOne({ _id: userId });
   for (let i = 0; i < articleIdArr.length; i++) {
     user.articles = user.articles.filter(
@@ -55,6 +55,7 @@ const removeArticle = async (userId, articleIdArr) => {
   user.spaceUsed = calSpaceUsed(user.articles);
   try {
     await user.save();
+    console.log("**************article info remove successfully!***********");
     return user;
   } catch (err) {
     console.log(err);
@@ -70,7 +71,7 @@ const removeArticle = async (userId, articleIdArr) => {
  * @param {Array{title,id}} picInfoArr 图片信息数组
  * @returns user
  */
-const addPicInfo = async (userId, articleId, picInfoArr) => {
+const addPicInfo = async (userId, articleId, picInfoArr=[]) => {
   const user = await User.findOne({ _id: userId });
   for (let j = 0; j < user.articles.length; j++) {
     let article = user.articles[j];

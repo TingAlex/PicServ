@@ -53,6 +53,7 @@ module.exports = app => {
     }
   );
 
+  // 分析文章涉及的图片，并采取对应操作
   app.post("/article_analyse", async function(req, res, next) {
     let user = await dbSys.getUserInfo(req.user._id);
     console.log("/article_analyse req.body*********");
@@ -66,6 +67,30 @@ module.exports = app => {
     res.send(picsNeedAdd);
   });
 
+  app.post("/delete_article", async function(req, res, next) {
+    let user = await dbSys.getUserInfo(req.user._id);
+    console.log("/delete_article req.body*********");
+    console.log(req.body);
+    let deleteArticleIdArr = req.body.deleteArticleArr;
+    let dbResult = await dbSys.removeArticle(
+      user._id.toString(),
+      deleteArticleIdArr
+    );
+    let result = "";
+    for (let i = 0; i < deleteArticleIdArr.length; i++) {
+      result = await fileSys.deleteArticle(
+        user._id.toString(),
+        deleteArticleIdArr[i].id
+      );
+    }
+    if (result === "file remove successfully!") {
+      res.send("ok");
+    } else {
+      res.send("failed");
+    }
+  });
+
+  // 上传渲染后的文章内容
   app.post("/article_content", async function(req, res, next) {
     // 这里很奇怪，这个req.user._id居然本身是一个对象而不是 string
     let userId = req.user._id.toString();
